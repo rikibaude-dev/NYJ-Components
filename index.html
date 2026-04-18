@@ -1,0 +1,999 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<title>NYJ — Components Catalog</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=DM+Mono:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --navy: #1a2744;
+  --navy-mid: #243460;
+  --gold: #b8962e;
+  --gold-light: #d4af50;
+  --gold-pale: #f5ead0;
+  --gold-faint: #faf5e8;
+  --cream: #f8f4ec;
+  --white: #ffffff;
+  --text: #1a1a1a;
+  --text-mid: #444;
+  --text-light: #888;
+  --border: #ddd5c0;
+  --border-light: #ede8dc;
+  --red: #b03a2e;
+  --green: #1a6b3c;
+  --radius: 12px;
+  --radius-sm: 6px;
+  --shadow: 0 4px 24px rgba(26,39,68,0.10);
+  --shadow-lg: 0 8px 40px rgba(26,39,68,0.16);
+}
+* { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+html, body { height: 100%; overflow: hidden; background: var(--cream); font-family: 'DM Mono', monospace; }
+
+/* ── HEADER ── */
+#header {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+  background: var(--navy);
+  padding: 14px 20px 12px;
+  display: flex; align-items: center; justify-content: space-between;
+  box-shadow: 0 2px 16px rgba(0,0,0,0.3);
+}
+#header .logo {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 22px; font-weight: 600; letter-spacing: 0.04em;
+  color: var(--gold-light);
+}
+#header .logo span { color: var(--white); opacity: 0.7; font-weight: 300; }
+#header .stats {
+  font-size: 10px; color: rgba(255,255,255,0.5);
+  text-align: right; line-height: 1.5;
+}
+#header .stats strong { color: var(--gold-light); font-size: 13px; }
+
+/* ── NAV TABS ── */
+#nav {
+  position: fixed; top: 62px; left: 0; right: 0; z-index: 99;
+  background: var(--navy-mid);
+  display: flex; overflow-x: auto; scrollbar-width: none;
+  border-bottom: 1px solid rgba(255,255,255,0.08);
+}
+#nav::-webkit-scrollbar { display: none; }
+.nav-tab {
+  flex: none; padding: 10px 18px; font-family: 'DM Mono', monospace;
+  font-size: 10px; font-weight: 500; letter-spacing: 0.08em;
+  color: rgba(255,255,255,0.45); cursor: pointer;
+  border-bottom: 2px solid transparent; transition: all 0.2s;
+  white-space: nowrap; text-transform: uppercase;
+}
+.nav-tab.active { color: var(--gold-light); border-bottom-color: var(--gold); }
+.nav-tab .count {
+  display: inline-block; background: var(--gold); color: var(--navy);
+  border-radius: 10px; padding: 1px 6px; font-size: 9px; margin-left: 5px;
+}
+
+/* ── MAIN CONTENT ── */
+#main {
+  position: fixed; top: 106px; left: 0; right: 0; bottom: 0;
+  overflow-y: auto; -webkit-overflow-scrolling: touch;
+  padding: 16px;
+}
+
+/* ── TOOLBAR ── */
+#toolbar {
+  display: flex; gap: 10px; margin-bottom: 16px; align-items: center;
+}
+#search-box {
+  flex: 1; padding: 10px 14px; border: 1.5px solid var(--border);
+  border-radius: var(--radius-sm); font-family: 'DM Mono', monospace;
+  font-size: 12px; background: var(--white); color: var(--text);
+  outline: none; transition: border-color 0.2s;
+}
+#search-box:focus { border-color: var(--gold); }
+#search-box::placeholder { color: var(--text-light); }
+.btn {
+  display: flex; align-items: center; gap: 6px;
+  padding: 10px 16px; border: none; border-radius: var(--radius-sm);
+  font-family: 'DM Mono', monospace; font-size: 11px; font-weight: 500;
+  cursor: pointer; transition: all 0.18s; white-space: nowrap;
+  letter-spacing: 0.03em;
+}
+.btn-primary { background: var(--navy); color: var(--gold-light); }
+.btn-primary:active { background: var(--navy-mid); transform: scale(0.97); }
+.btn-gold { background: var(--gold); color: var(--navy); font-weight: 600; }
+.btn-gold:active { background: var(--gold-light); transform: scale(0.97); }
+.btn-sm { padding: 7px 12px; font-size: 10px; }
+.btn-danger { background: #fde8e8; color: var(--red); }
+.btn-danger:active { background: #f5c0c0; }
+
+/* ── GRID VIEW ── */
+#grid-view { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.comp-card {
+  background: var(--white); border-radius: var(--radius);
+  border: 1px solid var(--border-light); padding: 14px;
+  cursor: pointer; transition: all 0.2s; position: relative;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.05);
+}
+.comp-card:active { transform: scale(0.97); box-shadow: var(--shadow); }
+.comp-card .card-cat {
+  font-size: 8px; letter-spacing: 0.12em; text-transform: uppercase;
+  color: var(--text-light); margin-bottom: 6px;
+}
+.comp-card .card-code {
+  font-size: 13px; font-weight: 500; color: var(--navy); margin-bottom: 3px;
+  letter-spacing: 0.02em;
+}
+.comp-card .card-name {
+  font-family: 'Cormorant Garamond', serif; font-size: 15px;
+  color: var(--text); line-height: 1.3; margin-bottom: 8px;
+}
+.comp-card .card-meta {
+  display: flex; gap: 6px; flex-wrap: wrap;
+}
+.tag {
+  display: inline-block; padding: 2px 8px; border-radius: 20px;
+  font-size: 9px; letter-spacing: 0.06em; font-weight: 500;
+}
+.tag-karat { background: var(--gold-faint); color: var(--gold); border: 1px solid var(--gold-pale); }
+.tag-unit { background: #eef4ff; color: #2a5298; border: 1px solid #d0dfff; }
+.tag-stock { background: var(--gold-faint); color: var(--green); border: 1px solid #c8e6c9; }
+.tag-out { background: #fde8e8; color: var(--red); border: 1px solid #f5c0c0; }
+.card-wt { font-size: 10px; color: var(--text-light); margin-top: 6px; }
+.card-wt strong { color: var(--navy); }
+
+/* category color stripe */
+.comp-card::before {
+  content: ''; position: absolute; top: 0; left: 0; right: 0;
+  height: 3px; border-radius: var(--radius) var(--radius) 0 0;
+}
+.cat-chain::before   { background: linear-gradient(90deg, #b8962e, #d4af50); }
+.cat-pearl::before   { background: linear-gradient(90deg, #7b9fc7, #a8c4e0); }
+.cat-clasp::before   { background: linear-gradient(90deg, #7a9e7e, #a8c9ac); }
+.cat-wire::before    { background: linear-gradient(90deg, #c4956a, #d4b090); }
+.cat-stone::before   { background: linear-gradient(90deg, #9b6b9b, #c49bc4); }
+.cat-casting::before { background: linear-gradient(90deg, #c47a5a, #d4a080); }
+.cat-lock::before    { background: linear-gradient(90deg, #5a7a9b, #8aaac4); }
+.cat-ring::before    { background: linear-gradient(90deg, #b8962e, #d4af50); }
+.cat-other::before   { background: linear-gradient(90deg, #999, #bbb); }
+
+/* ── LIST VIEW ── */
+#list-view { display: flex; flex-direction: column; gap: 6px; }
+.list-row {
+  background: var(--white); border-radius: var(--radius-sm);
+  border: 1px solid var(--border-light); padding: 10px 14px;
+  display: flex; align-items: center; gap: 10px; cursor: pointer;
+  transition: all 0.18s;
+}
+.list-row:active { background: var(--gold-faint); }
+.list-dot {
+  width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0;
+}
+.list-code { font-size: 11px; font-weight: 500; color: var(--navy); min-width: 80px; }
+.list-name { font-family: 'Cormorant Garamond', serif; font-size: 14px; flex: 1; color: var(--text); }
+.list-karat { font-size: 9px; color: var(--gold); font-weight: 500; min-width: 30px; text-align: right; }
+.list-wt { font-size: 9px; color: var(--text-light); min-width: 45px; text-align: right; }
+
+/* ── VIEW TOGGLE ── */
+.view-toggle { display: flex; background: var(--border-light); border-radius: var(--radius-sm); padding: 2px; }
+.vt-btn { padding: 6px 10px; border: none; background: transparent; cursor: pointer; border-radius: 4px; font-size: 14px; transition: all 0.15s; }
+.vt-btn.active { background: var(--white); box-shadow: 0 1px 4px rgba(0,0,0,0.1); }
+
+/* ── MODAL ── */
+#modal-overlay {
+  position: fixed; inset: 0; background: rgba(10,20,40,0.6);
+  z-index: 200; display: none; align-items: flex-end;
+  backdrop-filter: blur(4px);
+}
+#modal-overlay.open { display: flex; }
+#modal {
+  background: var(--white); width: 100%; max-height: 92vh;
+  border-radius: 20px 20px 0 0; overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+  animation: slideUp 0.3s cubic-bezier(0.34,1.56,0.64,1);
+}
+@keyframes slideUp { from { transform: translateY(100%); } to { transform: translateY(0); } }
+#modal-handle {
+  width: 40px; height: 4px; background: var(--border);
+  border-radius: 2px; margin: 12px auto 0;
+}
+#modal-content { padding: 20px; }
+#modal h2 {
+  font-family: 'Cormorant Garamond', serif; font-size: 24px;
+  color: var(--navy); margin-bottom: 20px; font-weight: 600;
+}
+
+/* ── FORM ── */
+.form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.form-full { grid-column: 1 / -1; }
+.form-group { display: flex; flex-direction: column; gap: 5px; }
+.form-group label {
+  font-size: 9px; letter-spacing: 0.1em; text-transform: uppercase;
+  color: var(--text-light); font-weight: 500;
+}
+.form-group input, .form-group select, .form-group textarea {
+  padding: 10px 12px; border: 1.5px solid var(--border);
+  border-radius: var(--radius-sm); font-family: 'DM Mono', monospace;
+  font-size: 13px; color: var(--text); background: var(--white);
+  outline: none; transition: border-color 0.2s; -webkit-appearance: none;
+}
+.form-group input:focus, .form-group select:focus, .form-group textarea:focus {
+  border-color: var(--gold);
+}
+.form-group textarea { resize: vertical; min-height: 70px; }
+.form-actions { display: flex; gap: 10px; margin-top: 20px; padding-bottom: 20px; }
+.form-actions .btn { flex: 1; justify-content: center; padding: 14px; font-size: 13px; }
+
+/* ── DETAIL VIEW ── */
+#detail-overlay {
+  position: fixed; inset: 0; background: rgba(10,20,40,0.6);
+  z-index: 200; display: none; align-items: flex-end;
+  backdrop-filter: blur(4px);
+}
+#detail-overlay.open { display: flex; }
+#detail-sheet {
+  background: var(--cream); width: 100%; max-height: 92vh;
+  border-radius: 20px 20px 0 0; overflow-y: auto;
+  animation: slideUp 0.3s cubic-bezier(0.34,1.56,0.64,1);
+}
+#detail-handle { width: 40px; height: 4px; background: var(--border); border-radius: 2px; margin: 12px auto 0; }
+#detail-content { padding: 20px; }
+.detail-header { margin-bottom: 20px; }
+.detail-cat { font-size: 9px; letter-spacing: 0.15em; text-transform: uppercase; color: var(--text-light); }
+.detail-code { font-family: 'DM Mono', monospace; font-size: 18px; font-weight: 500; color: var(--navy); }
+.detail-name { font-family: 'Cormorant Garamond', serif; font-size: 28px; color: var(--text); margin: 4px 0 12px; line-height: 1.2; }
+.detail-tags { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 20px; }
+.detail-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 20px; }
+.detail-field {
+  background: var(--white); border-radius: var(--radius-sm);
+  padding: 12px; border: 1px solid var(--border-light);
+}
+.detail-field .df-label { font-size: 8px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--text-light); margin-bottom: 4px; }
+.detail-field .df-val { font-family: 'DM Mono', monospace; font-size: 14px; font-weight: 500; color: var(--navy); }
+.detail-notes {
+  background: var(--white); border-radius: var(--radius-sm);
+  padding: 14px; border: 1px solid var(--border-light);
+  font-size: 13px; color: var(--text-mid); line-height: 1.6; margin-bottom: 20px;
+}
+.detail-actions { display: flex; gap: 10px; padding-bottom: 20px; }
+.detail-actions .btn { flex: 1; justify-content: center; padding: 14px; }
+
+/* ── EMPTY STATE ── */
+.empty-state {
+  text-align: center; padding: 60px 20px;
+  font-family: 'Cormorant Garamond', serif;
+}
+.empty-state .es-icon { font-size: 48px; margin-bottom: 16px; opacity: 0.4; }
+.empty-state h3 { font-size: 22px; color: var(--navy); margin-bottom: 8px; font-weight: 400; }
+.empty-state p { font-size: 13px; color: var(--text-light); font-family: 'DM Mono', monospace; }
+
+/* ── IMPORT/EXPORT ── */
+#ie-overlay {
+  position: fixed; inset: 0; background: rgba(10,20,40,0.6);
+  z-index: 300; display: none; align-items: center; justify-content: center;
+  padding: 20px;
+}
+#ie-overlay.open { display: flex; }
+#ie-box {
+  background: var(--white); border-radius: var(--radius);
+  padding: 24px; width: 100%; max-width: 480px;
+  box-shadow: var(--shadow-lg);
+}
+#ie-box h3 { font-family: 'Cormorant Garamond', serif; font-size: 22px; color: var(--navy); margin-bottom: 16px; }
+#ie-box textarea { width: 100%; height: 120px; padding: 10px; font-family: 'DM Mono', monospace; font-size: 10px; border: 1.5px solid var(--border); border-radius: var(--radius-sm); resize: none; }
+#ie-box .ie-actions { display: flex; gap: 10px; margin-top: 14px; }
+#ie-box .ie-actions .btn { flex: 1; justify-content: center; }
+
+/* ── STATS PAGE ── */
+#stats-view { display: grid; gap: 12px; }
+.stat-card {
+  background: var(--white); border-radius: var(--radius);
+  border: 1px solid var(--border-light); padding: 18px;
+}
+.stat-card h4 { font-family: 'Cormorant Garamond', serif; font-size: 16px; color: var(--navy); margin-bottom: 14px; font-weight: 600; }
+.stat-bar-row { display: flex; align-items: center; gap: 10px; margin-bottom: 8px; }
+.stat-bar-label { font-size: 10px; color: var(--text-mid); min-width: 80px; }
+.stat-bar-track { flex: 1; height: 6px; background: var(--border-light); border-radius: 3px; overflow: hidden; }
+.stat-bar-fill { height: 100%; border-radius: 3px; background: linear-gradient(90deg, var(--navy), var(--gold)); }
+.stat-bar-val { font-size: 10px; color: var(--text-light); min-width: 20px; text-align: right; }
+.stat-big { font-family: 'Cormorant Garamond', serif; font-size: 42px; color: var(--navy); font-weight: 300; }
+.stat-big-label { font-size: 10px; color: var(--text-light); letter-spacing: 0.08em; text-transform: uppercase; }
+.stat-grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.stat-mini { background: var(--gold-faint); border-radius: var(--radius-sm); padding: 14px; text-align: center; border: 1px solid var(--gold-pale); }
+.stat-mini .sm-val { font-family: 'Cormorant Garamond', serif; font-size: 28px; color: var(--navy); }
+.stat-mini .sm-label { font-size: 9px; color: var(--text-light); text-transform: uppercase; letter-spacing: 0.08em; }
+
+/* ── TOAST ── */
+#toast {
+  position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%) translateY(80px);
+  background: var(--navy); color: var(--gold-light); padding: 10px 20px;
+  border-radius: 30px; font-size: 12px; z-index: 999;
+  transition: transform 0.3s cubic-bezier(0.34,1.56,0.64,1);
+  white-space: nowrap; pointer-events: none;
+}
+#toast.show { transform: translateX(-50%) translateY(0); }
+
+/* ── SCROLLBAR ── */
+::-webkit-scrollbar { width: 4px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<div id="header">
+  <div class="logo">NYJ <span>/ Components</span></div>
+  <div class="stats">
+    <strong id="stat-total">0</strong> components<br>
+    <span id="stat-cats">0 categories</span>
+  </div>
+</div>
+
+<!-- NAV -->
+<div id="nav">
+  <div class="nav-tab active" data-tab="catalog" onclick="switchTab('catalog')">
+    Catalog <span class="count" id="cnt-all">0</span>
+  </div>
+  <div class="nav-tab" data-tab="chains" onclick="switchTab('chains')">
+    Chains <span class="count" id="cnt-chain">0</span>
+  </div>
+  <div class="nav-tab" data-tab="pearls" onclick="switchTab('pearls')">
+    Pearls/Beads <span class="count" id="cnt-pearl">0</span>
+  </div>
+  <div class="nav-tab" data-tab="clasps" onclick="switchTab('clasps')">
+    Clasps/Locks <span class="count" id="cnt-clasp">0</span>
+  </div>
+  <div class="nav-tab" data-tab="wires" onclick="switchTab('wires')">
+    Wire/Tube <span class="count" id="cnt-wire">0</span>
+  </div>
+  <div class="nav-tab" data-tab="stones" onclick="switchTab('stones')">
+    Stones <span class="count" id="cnt-stone">0</span>
+  </div>
+  <div class="nav-tab" data-tab="casting" onclick="switchTab('casting')">
+    Casting <span class="count" id="cnt-casting">0</span>
+  </div>
+  <div class="nav-tab" data-tab="other" onclick="switchTab('other')">
+    Other <span class="count" id="cnt-other">0</span>
+  </div>
+  <div class="nav-tab" data-tab="stats" onclick="switchTab('stats')">
+    Stats
+  </div>
+</div>
+
+<!-- MAIN -->
+<div id="main">
+  <!-- TOOLBAR -->
+  <div id="toolbar">
+    <input id="search-box" type="search" placeholder="Search code, name, karat…" oninput="renderCatalog()">
+    <div class="view-toggle">
+      <button class="vt-btn active" id="vt-grid" onclick="setView('grid')">⊞</button>
+      <button class="vt-btn" id="vt-list" onclick="setView('list')">☰</button>
+    </div>
+    <button class="btn btn-gold" onclick="openAddModal()">+ Add</button>
+    <button class="btn btn-primary btn-sm" onclick="openIE()">⇅</button>
+  </div>
+
+  <!-- CATALOG GRID/LIST -->
+  <div id="grid-view"></div>
+  <div id="list-view" style="display:none"></div>
+  <div id="stats-view" style="display:none"></div>
+</div>
+
+<!-- ADD/EDIT MODAL -->
+<div id="modal-overlay" onclick="closeModal(event)">
+  <div id="modal">
+    <div id="modal-handle"></div>
+    <div id="modal-content">
+      <h2 id="modal-title">New Component</h2>
+      <div class="form-grid">
+        <div class="form-group">
+          <label>BaaN Code *</label>
+          <input id="f-code" type="text" placeholder="e.g. CHA403" autocomplete="off" autocapitalize="characters">
+        </div>
+        <div class="form-group">
+          <label>Category *</label>
+          <select id="f-cat">
+            <option value="">Select…</option>
+            <option value="chain">Chain / Catena</option>
+            <option value="pearl">Pearl / Bead / Pallina</option>
+            <option value="clasp">Clasp / Lock / Chiusura</option>
+            <option value="wire">Wire / Tube / Filo</option>
+            <option value="stone">Stone / Pietra</option>
+            <option value="casting">Casting Component</option>
+            <option value="ring">Ring / Anello</option>
+            <option value="other">Other / Altro</option>
+          </select>
+        </div>
+        <div class="form-group form-full">
+          <label>Component Name *</label>
+          <input id="f-name" type="text" placeholder="e.g. Rolo Chain 3mm" autocomplete="off">
+        </div>
+        <div class="form-group">
+          <label>Karat / Metal</label>
+          <select id="f-karat">
+            <option value="">N/A</option>
+            <option value="24K">24K Gold</option>
+            <option value="22K">22K Gold</option>
+            <option value="21K">21K Gold</option>
+            <option value="18K">18K Gold</option>
+            <option value="14K">14K Gold</option>
+            <option value="10K">10K Gold</option>
+            <option value="18K WG">18K White Gold</option>
+            <option value="18K RG">18K Rose Gold</option>
+            <option value="925">Silver 925</option>
+            <option value="Silver">Silver</option>
+            <option value="Steel">Steel</option>
+            <option value="Other">Other</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Unit Weight (g)</label>
+          <input id="f-wt" type="number" step="0.001" placeholder="0.000" min="0">
+        </div>
+        <div class="form-group">
+          <label>Unit / Per</label>
+          <select id="f-unit">
+            <option value="pc">pc (piece)</option>
+            <option value="cm">cm (per cm)</option>
+            <option value="g">g (per gram)</option>
+            <option value="pair">pair</option>
+            <option value="set">set</option>
+            <option value="mm">mm</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Stock Qty</label>
+          <input id="f-stock" type="number" step="1" placeholder="0" min="0">
+        </div>
+        <div class="form-group">
+          <label>Dimensions</label>
+          <input id="f-dims" type="text" placeholder="e.g. 3x4.5mm" autocomplete="off">
+        </div>
+        <div class="form-group">
+          <label>Supplier</label>
+          <input id="f-supplier" type="text" placeholder="Supplier name" autocomplete="off">
+        </div>
+        <div class="form-group">
+          <label>Cost / Unit (USD)</label>
+          <input id="f-cost" type="number" step="0.01" placeholder="0.00" min="0">
+        </div>
+        <div class="form-group form-full">
+          <label>Notes</label>
+          <textarea id="f-notes" placeholder="Additional details, references, usage notes…"></textarea>
+        </div>
+      </div>
+      <div class="form-actions">
+        <button class="btn btn-danger" onclick="closeModal()">Cancel</button>
+        <button class="btn btn-gold" onclick="saveComponent()">Save Component</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- DETAIL OVERLAY -->
+<div id="detail-overlay" onclick="closeDetail(event)">
+  <div id="detail-sheet">
+    <div id="detail-handle"></div>
+    <div id="detail-content"></div>
+  </div>
+</div>
+
+<!-- IMPORT / EXPORT -->
+<div id="ie-overlay" onclick="closeIE(event)">
+  <div id="ie-box" onclick="event.stopPropagation()">
+    <h3>Import / Export</h3>
+    <div style="display:flex;gap:10px;margin-bottom:12px">
+      <button class="btn btn-primary" style="flex:1;justify-content:center" onclick="exportData()">📤 Export JSON</button>
+      <button class="btn btn-gold" style="flex:1;justify-content:center" onclick="document.getElementById('file-input').click()">📥 Import JSON</button>
+    </div>
+    <input id="file-input" type="file" accept=".json" style="display:none" onchange="importFromFile(event)">
+    <p style="font-size:10px;color:var(--text-light);margin-bottom:8px">Or paste JSON data:</p>
+    <textarea id="ie-textarea" placeholder='[{"code":"CHA403","name":"Chain 403",...}]'></textarea>
+    <div class="ie-actions">
+      <button class="btn btn-danger btn-sm" onclick="closeIE()">Close</button>
+      <button class="btn btn-gold" onclick="importFromText()">Import from text</button>
+    </div>
+  </div>
+</div>
+
+<!-- TOAST -->
+<div id="toast"></div>
+
+<script>
+// ═══════════════════════════════════════
+// DATA LAYER
+// ═══════════════════════════════════════
+const STORAGE_KEY = 'nyj_components_v1';
+let components = [];
+let editingId = null;
+let currentTab = 'catalog';
+let viewMode = 'grid';
+let currentFilter = '';
+
+// Sample starter data
+const STARTER_DATA = [
+  { id: uid(), code: 'CHA403', name: 'Chain 403', cat: 'chain', karat: '21K', wt: 0.05, unit: 'cm', stock: 500, dims: '', supplier: 'Al Nour Supply', cost: 0.05, notes: '34cm used per standard bracelet' },
+  { id: uid(), code: 'CHA622', name: 'Chain 622', cat: 'chain', karat: '21K', wt: 0.05, unit: 'cm', stock: 300, dims: '', supplier: 'Al Nour Supply', cost: 0.05, notes: '2cm connector' },
+  { id: uid(), code: 'CHA063', name: 'Rolo Chain', cat: 'chain', karat: '21K', wt: 0.064, unit: 'cm', stock: 800, dims: '3mm', supplier: 'Dubai Gold Co.', cost: 0.064, notes: '22cm per necklace' },
+  { id: uid(), code: 'CG21-CG', name: 'Casting Component Yellow Gold', cat: 'casting', karat: '21K', wt: 0, unit: 'pc', stock: 50, dims: '', supplier: 'In-house', cost: 0, notes: 'Casting comp for BIG NECKLACE' },
+  { id: uid(), code: 'STA001', name: 'Stamping 21K', cat: 'casting', karat: '21K', wt: 11.24, unit: 'pc', stock: 20, dims: '', supplier: '', cost: 0, notes: 'Main stamping piece NOWAIM' },
+  { id: uid(), code: 'CG21-WR', name: 'Wire Yellow Gold', cat: 'wire', karat: '21K', wt: 0.38, unit: 'pc', stock: 100, dims: '1mm', supplier: 'Dubai Gold Co.', cost: 0.38, notes: '' },
+  { id: uid(), code: 'LKA01Y', name: 'Lobster Clasp Lock Yellow', cat: 'clasp', karat: '21K', wt: 0.78, unit: 'pc', stock: 200, dims: '', supplier: 'Al Nour Supply', cost: 1.20, notes: 'Standard lobster clasp 21K' },
+  { id: uid(), code: 'SP3041', name: 'SP-3041 Component', cat: 'other', karat: '21K', wt: 5.7, unit: 'pc', stock: 30, dims: '', supplier: '', cost: 0, notes: '' },
+  { id: uid(), code: 'WIRE-1.5-OV', name: '1.5mm Hollow Wire / 3x4.5 Oval', cat: 'wire', karat: '21K', wt: 0.18, unit: 'pc', stock: 150, dims: '1.5mm / 3x4.5mm', supplier: '', cost: 0, notes: '28 pcs per necklace' },
+  { id: uid(), code: 'CYL-DC-2.5', name: '2.5x2.6mm Cylinder DC', cat: 'other', karat: '21K', wt: 0.07, unit: 'pc', stock: 200, dims: '2.5x2.6mm', supplier: '', cost: 0, notes: '8 pcs per necklace' },
+  { id: uid(), code: 'RING-0.6-2.9', name: 'Ring 0.6x2.9mm', cat: 'ring', karat: '21K', wt: 0.047, unit: 'pc', stock: 500, dims: '0.6x2.9mm', supplier: '', cost: 0, notes: '6 pcs per necklace' },
+  { id: uid(), code: 'RING-0.6-1.2', name: 'Ring 0.6x1.2mm', cat: 'ring', karat: '21K', wt: 0.0125, unit: 'pc', stock: 500, dims: '0.6x1.2mm', supplier: '', cost: 0, notes: '8 pcs per necklace' },
+];
+
+function uid() {
+  return Date.now().toString(36) + Math.random().toString(36).substr(2, 5);
+}
+
+function loadData() {
+  const saved = localStorage.getItem(STORAGE_KEY);
+  if (saved) {
+    try { components = JSON.parse(saved); } catch(e) { components = [...STARTER_DATA]; }
+  } else {
+    components = [...STARTER_DATA];
+    saveData();
+  }
+}
+
+function saveData() {
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(components));
+}
+
+// ═══════════════════════════════════════
+// CATEGORY HELPERS
+// ═══════════════════════════════════════
+const CAT_MAP = {
+  chain:   { label: 'Chain / Catena',   color: '#b8962e' },
+  pearl:   { label: 'Pearl / Bead',     color: '#7b9fc7' },
+  clasp:   { label: 'Clasp / Lock',     color: '#7a9e7e' },
+  wire:    { label: 'Wire / Tube',      color: '#c4956a' },
+  stone:   { label: 'Stone / Pietra',   color: '#9b6b9b' },
+  casting: { label: 'Casting',          color: '#c47a5a' },
+  ring:    { label: 'Ring',             color: '#b8962e' },
+  other:   { label: 'Other',            color: '#999999' },
+};
+
+const TAB_CAT_MAP = {
+  catalog: null,
+  chains: 'chain',
+  pearls: 'pearl',
+  clasps: 'clasp',
+  wires: 'wire',
+  stones: 'stone',
+  casting: 'casting',
+  other: 'other',
+  stats: null,
+};
+
+function catColor(cat) { return (CAT_MAP[cat] || CAT_MAP.other).color; }
+function catLabel(cat) { return (CAT_MAP[cat] || CAT_MAP.other).label; }
+
+// ═══════════════════════════════════════
+// TABS
+// ═══════════════════════════════════════
+function switchTab(tab) {
+  currentTab = tab;
+  document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
+  document.querySelector(`[data-tab="${tab}"]`).classList.add('active');
+
+  const isStats = tab === 'stats';
+  document.getElementById('toolbar').style.display = isStats ? 'none' : 'flex';
+  document.getElementById('grid-view').style.display = (!isStats && viewMode === 'grid') ? 'grid' : 'none';
+  document.getElementById('list-view').style.display = (!isStats && viewMode === 'list') ? 'flex' : 'none';
+  document.getElementById('stats-view').style.display = isStats ? 'grid' : 'none';
+
+  if (isStats) renderStats();
+  else renderCatalog();
+}
+
+// ═══════════════════════════════════════
+// VIEW MODE
+// ═══════════════════════════════════════
+function setView(mode) {
+  viewMode = mode;
+  document.getElementById('vt-grid').classList.toggle('active', mode === 'grid');
+  document.getElementById('vt-list').classList.toggle('active', mode === 'list');
+  document.getElementById('grid-view').style.display = mode === 'grid' ? 'grid' : 'none';
+  document.getElementById('list-view').style.display = mode === 'list' ? 'flex' : 'none';
+  renderCatalog();
+}
+
+// ═══════════════════════════════════════
+// RENDER CATALOG
+// ═══════════════════════════════════════
+function getFiltered() {
+  const q = document.getElementById('search-box').value.toLowerCase();
+  const catFilter = TAB_CAT_MAP[currentTab];
+  return components.filter(c => {
+    const matchCat = !catFilter || c.cat === catFilter;
+    const matchQ = !q || c.code.toLowerCase().includes(q)
+      || c.name.toLowerCase().includes(q)
+      || (c.karat||'').toLowerCase().includes(q)
+      || (c.supplier||'').toLowerCase().includes(q)
+      || (c.notes||'').toLowerCase().includes(q);
+    return matchCat && matchQ;
+  });
+}
+
+function renderCatalog() {
+  if (currentTab === 'stats') return;
+  const items = getFiltered();
+  updateCounts();
+
+  if (viewMode === 'grid') {
+    const gv = document.getElementById('grid-view');
+    if (!items.length) {
+      gv.innerHTML = `<div class="empty-state" style="grid-column:1/-1">
+        <div class="es-icon">💎</div>
+        <h3>No components found</h3>
+        <p>Try a different search or add a new component</p>
+      </div>`;
+      return;
+    }
+    gv.innerHTML = items.map(c => `
+      <div class="comp-card cat-${c.cat}" onclick="showDetail('${c.id}')">
+        <div class="card-cat">${catLabel(c.cat)}</div>
+        <div class="card-code">${c.code}</div>
+        <div class="card-name">${c.name}</div>
+        <div class="card-meta">
+          ${c.karat ? `<span class="tag tag-karat">${c.karat}</span>` : ''}
+          <span class="tag tag-unit">${c.unit}</span>
+          ${c.stock > 0
+            ? `<span class="tag tag-stock">${c.stock} in stock</span>`
+            : `<span class="tag tag-out">no stock</span>`}
+        </div>
+        ${c.wt ? `<div class="card-wt"><strong>${parseFloat(c.wt).toFixed(3)}g</strong> / ${c.unit}</div>` : ''}
+      </div>`).join('');
+  } else {
+    const lv = document.getElementById('list-view');
+    if (!items.length) {
+      lv.innerHTML = `<div class="empty-state">
+        <div class="es-icon">💎</div><h3>No components found</h3>
+        <p>Try a different search or add a new component</p>
+      </div>`;
+      return;
+    }
+    lv.innerHTML = items.map(c => `
+      <div class="list-row" onclick="showDetail('${c.id}')">
+        <div class="list-dot" style="background:${catColor(c.cat)}"></div>
+        <div class="list-code">${c.code}</div>
+        <div class="list-name">${c.name}</div>
+        <div class="list-karat">${c.karat||''}</div>
+        <div class="list-wt">${c.wt ? parseFloat(c.wt).toFixed(3)+'g' : ''}</div>
+      </div>`).join('');
+  }
+}
+
+function updateCounts() {
+  const all = components;
+  document.getElementById('stat-total').textContent = all.length;
+  const cats = new Set(all.map(c => c.cat));
+  document.getElementById('stat-cats').textContent = cats.size + ' categories';
+
+  document.getElementById('cnt-all').textContent   = all.length;
+  document.getElementById('cnt-chain').textContent = all.filter(c=>c.cat==='chain').length;
+  document.getElementById('cnt-pearl').textContent = all.filter(c=>c.cat==='pearl').length;
+  document.getElementById('cnt-clasp').textContent = all.filter(c=>c.cat==='clasp').length;
+  document.getElementById('cnt-wire').textContent  = all.filter(c=>c.cat==='wire').length;
+  document.getElementById('cnt-stone').textContent = all.filter(c=>c.cat==='stone').length;
+  document.getElementById('cnt-casting').textContent = all.filter(c=>c.cat==='casting').length;
+  document.getElementById('cnt-other').textContent = all.filter(c=>c.cat==='ring'||c.cat==='other').length;
+}
+
+// ═══════════════════════════════════════
+// DETAIL VIEW
+// ═══════════════════════════════════════
+function showDetail(id) {
+  const c = components.find(x => x.id === id);
+  if (!c) return;
+
+  const fields = [
+    ['BaaN Code', c.code],
+    ['Category', catLabel(c.cat)],
+    ['Karat / Metal', c.karat || 'N/A'],
+    ['Unit', c.unit],
+    ['Weight / unit', c.wt ? parseFloat(c.wt).toFixed(4) + ' g' : 'N/A'],
+    ['Dimensions', c.dims || 'N/A'],
+    ['Stock', c.stock != null ? c.stock : 'N/A'],
+    ['Supplier', c.supplier || 'N/A'],
+    ['Cost / unit', c.cost ? '$' + parseFloat(c.cost).toFixed(2) : 'N/A'],
+  ];
+
+  document.getElementById('detail-content').innerHTML = `
+    <div class="detail-header">
+      <div class="detail-cat">${catLabel(c.cat)}</div>
+      <div class="detail-code">${c.code}</div>
+      <div class="detail-name">${c.name}</div>
+      <div class="detail-tags">
+        ${c.karat ? `<span class="tag tag-karat">${c.karat}</span>` : ''}
+        <span class="tag tag-unit">${c.unit}</span>
+        ${c.stock > 0
+          ? `<span class="tag tag-stock">${c.stock} in stock</span>`
+          : `<span class="tag tag-out">out of stock</span>`}
+      </div>
+    </div>
+    <div class="detail-grid">
+      ${fields.map(([l,v]) => `
+        <div class="detail-field">
+          <div class="df-label">${l}</div>
+          <div class="df-val">${v}</div>
+        </div>`).join('')}
+    </div>
+    ${c.notes ? `
+      <div class="detail-notes">
+        <div style="font-size:9px;letter-spacing:.1em;text-transform:uppercase;color:var(--text-light);margin-bottom:6px">Notes</div>
+        ${c.notes}
+      </div>` : ''}
+    <div class="detail-actions">
+      <button class="btn btn-danger" onclick="deleteComponent('${c.id}')">🗑 Delete</button>
+      <button class="btn btn-primary" onclick="openEditModal('${c.id}')">✏️ Edit</button>
+    </div>
+  `;
+  document.getElementById('detail-overlay').classList.add('open');
+}
+
+function closeDetail(e) {
+  if (!e || e.target === document.getElementById('detail-overlay'))
+    document.getElementById('detail-overlay').classList.remove('open');
+}
+
+// ═══════════════════════════════════════
+// ADD / EDIT MODAL
+// ═══════════════════════════════════════
+function openAddModal() {
+  editingId = null;
+  document.getElementById('modal-title').textContent = 'New Component';
+  ['f-code','f-name','f-dims','f-supplier','f-notes'].forEach(id => document.getElementById(id).value = '');
+  ['f-wt','f-stock','f-cost'].forEach(id => document.getElementById(id).value = '');
+  document.getElementById('f-cat').value = '';
+  document.getElementById('f-karat').value = '';
+  document.getElementById('f-unit').value = 'pc';
+
+  // Auto-suggest category from current tab
+  const catFilter = TAB_CAT_MAP[currentTab];
+  if (catFilter) document.getElementById('f-cat').value = catFilter;
+
+  document.getElementById('modal-overlay').classList.add('open');
+  setTimeout(() => document.getElementById('f-code').focus(), 400);
+}
+
+function openEditModal(id) {
+  closeDetail();
+  const c = components.find(x => x.id === id);
+  if (!c) return;
+  editingId = id;
+  document.getElementById('modal-title').textContent = 'Edit Component';
+  document.getElementById('f-code').value = c.code;
+  document.getElementById('f-name').value = c.name;
+  document.getElementById('f-cat').value = c.cat;
+  document.getElementById('f-karat').value = c.karat || '';
+  document.getElementById('f-wt').value = c.wt || '';
+  document.getElementById('f-unit').value = c.unit || 'pc';
+  document.getElementById('f-stock').value = c.stock || '';
+  document.getElementById('f-dims').value = c.dims || '';
+  document.getElementById('f-supplier').value = c.supplier || '';
+  document.getElementById('f-cost').value = c.cost || '';
+  document.getElementById('f-notes').value = c.notes || '';
+  document.getElementById('modal-overlay').classList.add('open');
+}
+
+function closeModal(e) {
+  if (!e || e.target === document.getElementById('modal-overlay'))
+    document.getElementById('modal-overlay').classList.remove('open');
+}
+
+function saveComponent() {
+  const code = document.getElementById('f-code').value.trim().toUpperCase();
+  const name = document.getElementById('f-name').value.trim();
+  const cat  = document.getElementById('f-cat').value;
+  if (!code || !name || !cat) { toast('Fill in Code, Name and Category'); return; }
+
+  const comp = {
+    id:       editingId || uid(),
+    code, name, cat,
+    karat:    document.getElementById('f-karat').value,
+    wt:       parseFloat(document.getElementById('f-wt').value) || 0,
+    unit:     document.getElementById('f-unit').value || 'pc',
+    stock:    parseInt(document.getElementById('f-stock').value) || 0,
+    dims:     document.getElementById('f-dims').value.trim(),
+    supplier: document.getElementById('f-supplier').value.trim(),
+    cost:     parseFloat(document.getElementById('f-cost').value) || 0,
+    notes:    document.getElementById('f-notes').value.trim(),
+  };
+
+  if (editingId) {
+    const idx = components.findIndex(x => x.id === editingId);
+    components[idx] = comp;
+    toast('Component updated ✓');
+  } else {
+    components.unshift(comp);
+    toast('Component added ✓');
+  }
+  saveData();
+  closeModal();
+  renderCatalog();
+  updateCounts();
+}
+
+function deleteComponent(id) {
+  if (!confirm('Delete this component?')) return;
+  components = components.filter(x => x.id !== id);
+  saveData();
+  closeDetail();
+  renderCatalog();
+  updateCounts();
+  toast('Deleted');
+}
+
+// ═══════════════════════════════════════
+// STATS
+// ═══════════════════════════════════════
+function renderStats() {
+  const sv = document.getElementById('stats-view');
+  const total = components.length;
+  const byCat = {};
+  Object.keys(CAT_MAP).forEach(k => byCat[k] = 0);
+  components.forEach(c => byCat[c.cat] = (byCat[c.cat]||0) + 1);
+  const maxCat = Math.max(...Object.values(byCat), 1);
+
+  const totalStock = components.reduce((s,c) => s + (c.stock||0), 0);
+  const withWeight = components.filter(c => c.wt > 0);
+  const avgWt = withWeight.length ? withWeight.reduce((s,c)=>s+c.wt,0)/withWeight.length : 0;
+  const noStock = components.filter(c => !c.stock || c.stock === 0).length;
+
+  const byKarat = {};
+  components.forEach(c => { if (c.karat) byKarat[c.karat] = (byKarat[c.karat]||0)+1; });
+  const topKarats = Object.entries(byKarat).sort((a,b)=>b[1]-a[1]).slice(0,5);
+  const maxK = topKarats[0]?.[1] || 1;
+
+  sv.innerHTML = `
+    <div class="stat-grid2">
+      <div class="stat-mini">
+        <div class="sm-val">${total}</div>
+        <div class="sm-label">Total Components</div>
+      </div>
+      <div class="stat-mini">
+        <div class="sm-val">${totalStock.toLocaleString()}</div>
+        <div class="sm-label">Total Stock</div>
+      </div>
+      <div class="stat-mini">
+        <div class="sm-val">${noStock}</div>
+        <div class="sm-label">Out of Stock</div>
+      </div>
+      <div class="stat-mini">
+        <div class="sm-val">${avgWt.toFixed(3)}g</div>
+        <div class="sm-label">Avg Weight</div>
+      </div>
+    </div>
+
+    <div class="stat-card">
+      <h4>Components by Category</h4>
+      ${Object.entries(CAT_MAP).map(([k,v]) => `
+        <div class="stat-bar-row">
+          <div class="stat-bar-label">${v.label.split('/')[0].trim()}</div>
+          <div class="stat-bar-track">
+            <div class="stat-bar-fill" style="width:${(byCat[k]||0)/maxCat*100}%;background:${v.color}"></div>
+          </div>
+          <div class="stat-bar-val">${byCat[k]||0}</div>
+        </div>`).join('')}
+    </div>
+
+    ${topKarats.length ? `
+    <div class="stat-card">
+      <h4>Top Karats / Metals</h4>
+      ${topKarats.map(([k,v]) => `
+        <div class="stat-bar-row">
+          <div class="stat-bar-label">${k}</div>
+          <div class="stat-bar-track"><div class="stat-bar-fill" style="width:${v/maxK*100}%"></div></div>
+          <div class="stat-bar-val">${v}</div>
+        </div>`).join('')}
+    </div>` : ''}
+
+    <div class="stat-card">
+      <h4>Supplier Overview</h4>
+      ${(()=>{
+        const byS = {};
+        components.forEach(c => { const s = c.supplier||'Unknown'; byS[s]=(byS[s]||0)+1; });
+        const top = Object.entries(byS).sort((a,b)=>b[1]-a[1]).slice(0,6);
+        const mx = top[0]?.[1]||1;
+        return top.map(([s,v]) => `
+          <div class="stat-bar-row">
+            <div class="stat-bar-label">${s}</div>
+            <div class="stat-bar-track"><div class="stat-bar-fill" style="width:${v/mx*100}%"></div></div>
+            <div class="stat-bar-val">${v}</div>
+          </div>`).join('') || '<p style="color:var(--text-light);font-size:12px">No data</p>';
+      })()}
+    </div>
+  `;
+}
+
+// ═══════════════════════════════════════
+// IMPORT / EXPORT
+// ═══════════════════════════════════════
+function openIE() { document.getElementById('ie-overlay').classList.add('open'); }
+function closeIE(e) {
+  if (!e || e.target === document.getElementById('ie-overlay'))
+    document.getElementById('ie-overlay').classList.remove('open');
+}
+
+function exportData() {
+  const json = JSON.stringify(components, null, 2);
+  const blob = new Blob([json], { type: 'application/json' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url; a.download = 'nyj_components_' + new Date().toISOString().slice(0,10) + '.json';
+  a.click(); URL.revokeObjectURL(url);
+  toast('Export ready ✓');
+}
+
+function importFromFile(e) {
+  const file = e.target.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = ev => {
+    try {
+      const data = JSON.parse(ev.target.result);
+      if (!Array.isArray(data)) throw new Error('Not an array');
+      data.forEach(c => { if (!c.id) c.id = uid(); });
+      components = data;
+      saveData(); renderCatalog(); updateCounts();
+      closeIE(); toast(`Imported ${data.length} components ✓`);
+    } catch(err) { toast('Invalid JSON file'); }
+  };
+  reader.readAsText(file);
+}
+
+function importFromText() {
+  const txt = document.getElementById('ie-textarea').value.trim();
+  if (!txt) return;
+  try {
+    const data = JSON.parse(txt);
+    if (!Array.isArray(data)) throw new Error();
+    data.forEach(c => { if (!c.id) c.id = uid(); });
+    components = data;
+    saveData(); renderCatalog(); updateCounts();
+    closeIE(); toast(`Imported ${data.length} components ✓`);
+  } catch(e) { toast('Invalid JSON'); }
+}
+
+// ═══════════════════════════════════════
+// TOAST
+// ═══════════════════════════════════════
+let toastTimer;
+function toast(msg) {
+  const el = document.getElementById('toast');
+  el.textContent = msg;
+  el.classList.add('show');
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => el.classList.remove('show'), 2200);
+}
+
+// ═══════════════════════════════════════
+// INIT
+// ═══════════════════════════════════════
+loadData();
+renderCatalog();
+updateCounts();
+
+// Swipe down to close modals
+let touchStartY = 0;
+['modal', 'detail-sheet'].forEach(id => {
+  const el = document.getElementById(id);
+  el.addEventListener('touchstart', e => touchStartY = e.touches[0].clientY, {passive:true});
+  el.addEventListener('touchmove', e => {
+    if (e.touches[0].clientY - touchStartY > 80) {
+      if (id === 'modal') closeModal();
+      else closeDetail();
+    }
+  }, {passive:true});
+});
+</script>
+</body>
+</html>
